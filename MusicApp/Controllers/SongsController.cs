@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MusicApp.Data;
 using MusicApp.Model;
 
@@ -15,25 +14,34 @@ namespace MusicApp.Controllers
 			this._apiDbContext = apiDbContext;
 		}
 
-		//List<Song> songs = new List<Song>() {
-
-		//	new Song{
-		//	ID = 1,
-		//	Language = "en",
-		//	Title = "My New Song"
-		//},new Song {
-		//ID = 2,
-		//	Language = "ur",
-		//	Title = "Mera New Song"
-		//} 
-		
-		//};
-
 		[HttpGet]
 		public IEnumerable<Song> Get()
 		{
 			return _apiDbContext.Songs;
+		}
 
+		[HttpPost]
+		public void Create([FromBody] Song song)
+		{
+			_apiDbContext?.Songs?.Add(song);
+			_apiDbContext?.SaveChanges();
+		}
+
+		[HttpPut]
+		public void Update([FromBody] Song song)
+		{
+			Song? songitem = _apiDbContext?.Songs?.Find(song.ID);
+			songitem.Title = song.Title;
+			songitem.Language = song.Language;
+			_apiDbContext?.SaveChanges();
+		}
+
+		[HttpDelete]
+		public void Remove([FromBody] Song song)
+		{
+			Song? songitem = _apiDbContext?.Songs?.Find(song.ID);
+			_apiDbContext?.Remove(songitem);
+			_apiDbContext?.SaveChanges();
 		}
 	}	
 }
