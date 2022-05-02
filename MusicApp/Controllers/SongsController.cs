@@ -1,5 +1,4 @@
-﻿using Azure.Storage.Blobs;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MusicApp.Data;
 using MusicApp.Helpers;
@@ -7,7 +6,7 @@ using MusicApp.Model;
 
 namespace MusicApp.Controllers
 {
-	[Route("api/[controller]")]
+	[Route("api/test/[controller]")]
 	[ApiController]
 	public class SongsController : ControllerBase
 	{
@@ -31,23 +30,23 @@ namespace MusicApp.Controllers
 			return Ok(await _apiDbContext.Songs.ToListAsync());
 		}
 
-		//[HttpPost]
-		//public async Task<IActionResult> Create([FromBody] Song song)
-		//{
-		//	if (song == null)
-		//	{
-		//		return BadRequest("Please provide the details to add new record");
-		//	}
-		//	await _apiDbContext.Songs.AddAsync(song);
-		//	await _apiDbContext.SaveChangesAsync();
-		//	return Ok("New Record added successfully.");
-		//}
+		[HttpPost("[action]")]
+		public async Task<IActionResult> Create([FromBody] Song song)
+		{
+			if (song == null)
+			{
+				return BadRequest("Please provide the details to add new record");
+			}
+			await _apiDbContext.Songs.AddAsync(song);
+			await _apiDbContext.SaveChangesAsync();
+			return Ok("New Record added successfully.");
+		}
 
 		[HttpPost]
 		public async Task<IActionResult> CreateNewRecordWithFile([FromForm] Song song)
 		{			
 			var imageUrl = await FileHelper.UploadImage(song.image);
-			song.Imageurl = imageUrl;
+			song.ImageUrl = imageUrl;
 			await _apiDbContext.Songs.AddAsync(song);
 			await _apiDbContext.SaveChangesAsync();
 			return StatusCode(StatusCodes.Status201Created);
@@ -67,7 +66,7 @@ namespace MusicApp.Controllers
 					if (song.image != null)
 					{
 						var imageUrl = await FileHelper.UploadImage(song.image);
-						songitem.Imageurl = imageUrl;
+						songitem.ImageUrl = imageUrl;
 					}
 					await _apiDbContext?.SaveChangesAsync();
 					return Ok("Record has been updated successfully");
