@@ -13,5 +13,6 @@ namespace MusicApp.Model
 		public string? ImageUrl { get; set; }
 
 		public ICollection<Album>? Albums { get; set; }
+		public ICollection<Song>? Songs { get; set; }
 	}
 }
