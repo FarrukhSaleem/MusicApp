@@ -12,5 +12,7 @@ namespace MusicApp.Model
 		public IFormFile? image { get; set; }
 		public ICollection<Song>? Songs { get; set; }
 
+
+
 	}
 }
